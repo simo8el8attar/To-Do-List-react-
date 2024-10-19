@@ -5,7 +5,7 @@ import { useRef } from 'react';
 function App() {
   const [task,setTask] = useState("");
   const [items,setItems] = useState([]);
-  const [checkedItems,setCheckedItems] = useState([]);
+  const [checkedItems,setCheckedItems] = useState({});
 
   const addItem = ()=> {
     if(task.trim()){
@@ -18,7 +18,7 @@ function App() {
     setItems(items.filter((item,i)=> i != index));
   };
   const checkItem = (index)=>{
-      setCheckedItems(array=> [...array,items[index]]);
+      setCheckedItems(prev=> ({...prev , [index] : !prev[index]}));
   }
   return (
     <>
@@ -32,14 +32,17 @@ function App() {
       <div>
         <ul style={{marginTop : "20px"}}>
           {items.map((item,index) =>
+          
           <li style=
             {{fontSize : "30px" ,
             fontFamily : "monospace",
-            textDecorationLine : checkedItems[index] ? "line-through" : "none"
+            textDecorationLine : checkedItems[index] ? "line-through" : "none" ,
             }} key={index}>
             {item}
-            <button onClick={()=>checkItem(index)} className='btn btn-success m-3'> check task </button>
-            <button onClick={ ()=>delItem(index) } className='btn btn-danger'>Delete task</button>
+            <input
+              checked = {checkItem[index] || false }
+             onChange={()=> checkItem(index)}  className='form-check-input m-2' type='checkbox'/>
+            <button onClick={ ()=>delItem(index) } className='btn btn-danger m-1'>X</button>
             </li>
           )}
         </ul>
